@@ -1,0 +1,14 @@
+{
+  "name": "skillforge-workspace",
+  "version": "1.0.0",
+  "description": "SkillForge AI - Adaptive Classroom Platform",
+  "scripts": {
+    "db:migrate": "node database/migrate.js",
+    "db:seed": "node database/seed.js",
+    "start:backend": "cd backend-core && npm start",
+    "dev:backend": "cd backend-core && npm run dev",
+    "start:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "test:backend": "cd backend-core && npm test"
+  }
+}
