@@ -1,6 +1,4 @@
 import os
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -10,380 +8,10 @@ from docx.oxml.ns import nsdecls
 
 OUTPUT_DIR = r"d:\skillforge"
 IMG_DIR = os.path.join(OUTPUT_DIR, "report_images_40p")
-os.makedirs(IMG_DIR, exist_ok=True)
-
-# ---------------------------------------------------------------------------
-# 1. Generate High-Resolution Diagrams with Matplotlib
-# ---------------------------------------------------------------------------
-
-def create_architecture_diagram():
-    fig, ax = plt.subplots(figsize=(11, 7), dpi=300)
-    ax.axis('off')
-    ax.text(5.5, 9.6, "SkillForge AI - Distributed Microservice Architecture", ha='center', va='center', fontsize=14, fontweight='bold', color='#0F172A')
-
-    # Presentation Tier
-    b1 = patches.FancyBboxPatch((0.5, 7.0), 10.0, 2.0, boxstyle="round,pad=0.3", edgecolor='#2563EB', facecolor='#EFF6FF', lw=2)
-    ax.add_patch(b1)
-    ax.text(5.5, 8.4, "PRESENTATION TIER (Client Single Page Application - Port 3000)", ha='center', va='center', fontsize=11, fontweight='bold', color='#1E40AF')
-    ax.text(5.5, 7.6, "• Student Socratic Learning Portal  • Teacher Intervention Center & Heatmaps\n• FairGrade Rubric & Audit Dashboard  • Isolated Code Sandbox & Autograder Console", ha='center', va='center', fontsize=8.5, color='#1E3A8A')
-
-    # Gateway Arrow
-    ax.annotate('', xy=(5.5, 6.1), xytext=(5.5, 6.9), arrowprops=dict(arrowstyle="<->", color='#3B82F6', lw=2.5))
-    ax.text(5.8, 6.5, "RESTful JSON / HTTPS / WebSockets", fontsize=8.5, color='#475569', va='center')
-
-    # Application Gateway & Core Backend
-    b2 = patches.FancyBboxPatch((0.5, 3.6), 10.0, 2.3, boxstyle="round,pad=0.3", edgecolor='#059669', facecolor='#ECFDF5', lw=2)
-    ax.add_patch(b2)
-    ax.text(5.5, 5.3, "APPLICATION GATEWAY & CORE BACKEND (Node.js & Express.js - Port 5000)", ha='center', va='center', fontsize=11, fontweight='bold', color='#065F46')
-    ax.text(5.5, 4.3, "• JWT & RBAC Middleware Engine  • Document Chunker & TF-IDF Vector Space Index\n• Cryptographic Double-Blind Anonymization Layer  • Judge0 Orchestrator & Polling Queue\n• Gemini 2.0 Flash Gateway Registry  • Real-Time Notification & Audit Logger", ha='center', va='center', fontsize=8, color='#047857')
-
-    # Sub-services (3 Bottom boxes)
-    b3 = patches.FancyBboxPatch((0.5, 0.4), 3.0, 2.4, boxstyle="round,pad=0.2", edgecolor='#7C3AED', facecolor='#F5F3FF', lw=1.8)
-    ax.add_patch(b3)
-    ax.text(2.0, 2.2, "FairGrade Service", ha='center', va='center', fontsize=10, fontweight='bold', color='#5B21B6')
-    ax.text(2.0, 1.2, "Python FastAPI (Port 8000)\n• Dual-Pass Evaluator\n• Confidence Interval Metric\n• Pydantic Schema Validator\n• Variance & Bias Detector", ha='center', va='center', fontsize=7.5, color='#4C1D95')
-
-    b4 = patches.FancyBboxPatch((4.0, 0.4), 3.0, 2.4, boxstyle="round,pad=0.2", edgecolor='#D97706', facecolor='#FFFBEB', lw=1.8)
-    ax.add_patch(b4)
-    ax.text(5.5, 2.2, "Persistence Tier", ha='center', va='center', fontsize=10, fontweight='bold', color='#92400E')
-    ax.text(5.5, 1.2, "PostgreSQL / Supabase (15.1)\n• ACID Transactions & Pooling\n• Double-Blind Identity Maps\n• Rubrics & Question Banks\n• Mastery Telemetry Store", ha='center', va='center', fontsize=7.5, color='#78350F')
-
-    b5 = patches.FancyBboxPatch((7.5, 0.4), 3.0, 2.4, boxstyle="round,pad=0.2", edgecolor='#DC2626', facecolor='#FEF2F2', lw=1.8)
-    ax.add_patch(b5)
-    ax.text(9.0, 2.2, "Execution & AI Cloud", ha='center', va='center', fontsize=10, fontweight='bold', color='#991B1B')
-    ax.text(9.0, 1.2, "Cloud Compute Infrastructure\n• Google Gemini 2.0 Flash API\n• Judge0 Code Execution Engine\n• YouTube Data v3 API\n• Isolated Container Runtimes", ha='center', va='center', fontsize=7.5, color='#7F1D1D')
-
-    # Connectors
-    ax.annotate('', xy=(2.0, 2.9), xytext=(3.0, 3.5), arrowprops=dict(arrowstyle="<->", color='#7C3AED', lw=1.8))
-    ax.annotate('', xy=(5.5, 2.9), xytext=(5.5, 3.5), arrowprops=dict(arrowstyle="<->", color='#D97706', lw=1.8))
-    ax.annotate('', xy=(9.0, 2.9), xytext=(8.0, 3.5), arrowprops=dict(arrowstyle="<->", color='#DC2626', lw=1.8))
-
-    ax.set_xlim(0, 11)
-    ax.set_ylim(0, 10)
-    p = os.path.join(IMG_DIR, "fig_arch.png")
-    plt.tight_layout()
-    plt.savefig(p, dpi=300, bbox_inches='tight')
-    plt.close()
-    return p
-
-def create_usecase_diagram():
-    fig, ax = plt.subplots(figsize=(11, 7.5), dpi=300)
-    ax.axis('off')
-    ax.text(5.5, 9.6, "SkillForge AI - System Use Case Model", ha='center', va='center', fontsize=14, fontweight='bold', color='#0F172A')
-
-    sys_b = patches.FancyBboxPatch((2.2, 0.4), 6.6, 8.8, boxstyle="round,pad=0.2", edgecolor='#64748B', facecolor='#F8FAFC', lw=2, linestyle='--')
-    ax.add_patch(sys_b)
-    ax.text(5.5, 8.8, "SkillForge Core Platform Boundary", ha='center', va='center', fontsize=10.5, fontweight='bold', color='#475569')
-
-    ucs = [
-        (5.5, 8.1, "UC1: Authenticate & Select Role"),
-        (5.5, 7.2, "UC2: Browse Syllabi & Vector Library"),
-        (5.5, 6.3, "UC3: Engage in Socratic AI Tutoring"),
-        (5.5, 5.4, "UC4: Submit Subjective Proofs & Answers"),
-        (5.5, 4.5, "UC5: Execute & Autograde Code (Judge0)"),
-        (5.5, 3.6, "UC6: Double-Blind FairGrade Grading"),
-        (5.5, 2.7, "UC7: Monitor Class Mastery & Early Alerts"),
-        (5.5, 1.8, "UC8: Audit Evaluation Variance & Appeals"),
-        (5.5, 0.9, "UC9: Manage RBAC, Syllabi & Cloud APIs"),
-    ]
-
-    for x, y, t in ucs:
-        el = patches.Ellipse((x, y), 5.6, 0.65, edgecolor='#2563EB', facecolor='#EFF6FF', lw=1.5)
-        ax.add_patch(el)
-        ax.text(x, y, t, ha='center', va='center', fontsize=8.5, fontweight='bold', color='#1E40AF')
-
-    # Student
-    ax.plot(0.9, 6.0, 'o', markersize=18, color='#3B82F6')
-    ax.text(0.9, 5.1, "Student\nActor", ha='center', va='center', fontsize=10, fontweight='bold', color='#1E3A8A')
-    for yt in [8.1, 7.2, 6.3, 5.4, 4.5]:
-        ax.annotate('', xy=(2.7, yt), xytext=(1.2, 5.8), arrowprops=dict(arrowstyle="-", color='#3B82F6', lw=1.2))
-
-    # Teacher
-    ax.plot(10.1, 4.5, 'o', markersize=18, color='#059669')
-    ax.text(10.1, 3.6, "Teacher\nActor", ha='center', va='center', fontsize=10, fontweight='bold', color='#065F46')
-    for yt in [8.1, 7.2, 3.6, 2.7, 1.8]:
-        ax.annotate('', xy=(8.3, yt), xytext=(9.8, 4.4), arrowprops=dict(arrowstyle="-", color='#059669', lw=1.2))
-
-    # Admin
-    ax.plot(0.9, 1.6, 'o', markersize=18, color='#7C3AED')
-    ax.text(0.9, 0.7, "System\nAdmin", ha='center', va='center', fontsize=10, fontweight='bold', color='#4C1D95')
-    for yt in [8.1, 1.8, 0.9]:
-        ax.annotate('', xy=(2.7, yt), xytext=(1.2, 1.5), arrowprops=dict(arrowstyle="-", color='#7C3AED', lw=1.2))
-
-    ax.set_xlim(0, 11)
-    ax.set_ylim(0, 10)
-    p = os.path.join(IMG_DIR, "fig_usecase.png")
-    plt.tight_layout()
-    plt.savefig(p, dpi=300, bbox_inches='tight')
-    plt.close()
-    return p
-
-def create_dfd_level0_diagram():
-    fig, ax = plt.subplots(figsize=(10, 5.5), dpi=300)
-    ax.axis('off')
-    ax.text(5, 9.4, "SkillForge AI - Data Flow Diagram (Level 0 Context Diagram)", ha='center', va='center', fontsize=13, fontweight='bold', color='#0F172A')
-
-    # Central Bubble
-    c = patches.Circle((5.0, 5.0), 1.9, facecolor='#ECFDF5', edgecolor='#059669', lw=2.5)
-    ax.add_patch(c)
-    ax.text(5.0, 5.3, "0.0", ha='center', va='center', fontsize=11, fontweight='bold', color='#047857')
-    ax.text(5.0, 4.7, "SkillForge AI\nPlatform", ha='center', va='center', fontsize=10, fontweight='bold', color='#065F46')
-
-    # Entities
-    def d_ent(x, y, text, col):
-        r = patches.Rectangle((x-1.1, y-0.6), 2.2, 1.2, facecolor='#EFF6FF', edgecolor=col, lw=2)
-        ax.add_patch(r)
-        ax.text(x, y, text, ha='center', va='center', fontsize=9.5, fontweight='bold', color=col)
-
-    d_ent(1.3, 7.5, "STUDENT\nACTOR", '#1D4ED8')
-    d_ent(8.7, 7.5, "TEACHER\nFACULTY", '#047857')
-    d_ent(5.0, 1.2, "SYSTEM\nADMINISTRATOR", '#6D28D9')
-
-    # Arrows
-    ax.annotate('Written / Code Submissions\nSocratic Inquiries', xy=(3.3, 5.8), xytext=(2.0, 6.8), arrowprops=dict(arrowstyle="->", color='#1D4ED8', lw=1.5), fontsize=7.5)
-    ax.annotate('Evaluations, Hints, Grades', xy=(2.0, 7.1), xytext=(3.3, 6.2), arrowprops=dict(arrowstyle="->", color='#1D4ED8', lw=1.5), fontsize=7.5)
-
-    ax.annotate('Syllabi, Rubrics, Constraints', xy=(6.7, 5.8), xytext=(8.0, 6.8), arrowprops=dict(arrowstyle="->", color='#047857', lw=1.5), fontsize=7.5)
-    ax.annotate('Class Analytics, Mastery Telemetry', xy=(8.0, 7.1), xytext=(6.7, 6.2), arrowprops=dict(arrowstyle="->", color='#047857', lw=1.5), fontsize=7.5)
-
-    ax.annotate('RBAC & Config', xy=(5.2, 3.1), xytext=(5.2, 1.9), arrowprops=dict(arrowstyle="->", color='#6D28D9', lw=1.5), fontsize=7.5)
-    ax.annotate('Audit Logs', xy=(4.8, 1.9), xytext=(4.8, 3.1), arrowprops=dict(arrowstyle="->", color='#6D28D9', lw=1.5), fontsize=7.5)
-
-    ax.set_xlim(0, 10)
-    ax.set_ylim(0, 10)
-    p = os.path.join(IMG_DIR, "fig_dfd0.png")
-    plt.tight_layout()
-    plt.savefig(p, dpi=300, bbox_inches='tight')
-    plt.close()
-    return p
-
-def create_dfd_level1_diagram():
-    fig, ax = plt.subplots(figsize=(11, 7), dpi=300)
-    ax.axis('off')
-    ax.text(5.5, 9.6, "SkillForge AI - Data Flow Diagram (Level 1 Functional Decomposition)", ha='center', va='center', fontsize=13, fontweight='bold', color='#0F172A')
-
-    # Entities
-    def draw_e(x, y, txt, col):
-        r = patches.Rectangle((x-0.9, y-0.45), 1.8, 0.9, facecolor='#F8FAFC', edgecolor=col, lw=2)
-        ax.add_patch(r)
-        ax.text(x, y, txt, ha='center', va='center', fontsize=8.5, fontweight='bold', color=col)
-
-    def draw_p(x, y, num, txt, col='#059669'):
-        r = patches.FancyBboxPatch((x-1.2, y-0.45), 2.4, 0.9, boxstyle="round,pad=0.15", edgecolor=col, facecolor='#ECFDF5', lw=1.8)
-        ax.add_patch(r)
-        ax.text(x, y+0.16, f"[{num}]", ha='center', va='center', fontsize=7.5, fontweight='bold', color='#065F46')
-        ax.text(x, y-0.12, txt, ha='center', va='center', fontsize=7.5, fontweight='bold', color='#047857')
-
-    def draw_ds(x, y, num, txt):
-        ax.plot([x-1.1, x+1.1], [y+0.28, y+0.28], color='#D97706', lw=2)
-        ax.plot([x-1.1, x+1.1], [y-0.28, y-0.28], color='#D97706', lw=2)
-        ax.text(x-0.8, y, f"D{num}", ha='center', va='center', fontsize=7.5, fontweight='bold', color='#B45309')
-        ax.text(x+0.15, y, txt, ha='center', va='center', fontsize=7.5, color='#78350F')
-
-    draw_e(1.0, 7.8, "STUDENT", '#1D4ED8')
-    draw_e(1.0, 2.2, "TEACHER", '#047857')
-
-    draw_p(4.0, 7.8, "1.0", "Double-Blind\nAnonymization")
-    draw_p(8.0, 7.8, "2.0", "FairGrade Dual-Pass\nEvaluation")
-    draw_p(4.0, 5.0, "3.0", "RAG Vector\nSocratic Engine")
-    draw_p(4.0, 2.2, "4.0", "Syllabus Taxonomy\nExtraction")
-    draw_p(8.0, 2.2, "5.0", "Intervention &\nMastery Engine")
-
-    draw_ds(4.0, 0.6, "1", "PostgreSQL Submissions Store")
-    draw_ds(8.0, 5.0, "2", "In-Memory Vector Store")
-
-    # Connectors
-    ax.annotate('Answer Text', xy=(2.8, 7.8), xytext=(1.9, 7.8), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2), fontsize=7)
-    ax.annotate('Anon Token', xy=(6.8, 7.8), xytext=(5.2, 7.8), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2), fontsize=7)
-    ax.annotate('Scores & Feedback', xy=(4.0, 7.2), xytext=(8.0, 7.2), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2), fontsize=7)
-
-    ax.annotate('Syllabus PDF', xy=(2.8, 2.2), xytext=(1.9, 2.2), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2), fontsize=7)
-    ax.annotate('Embeddings', xy=(7.0, 4.8), xytext=(5.2, 2.5), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2), fontsize=7)
-    ax.annotate('Query Context', xy=(5.2, 5.0), xytext=(6.9, 5.0), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2), fontsize=7)
-    ax.annotate('Socratic Hints', xy=(1.5, 7.2), xytext=(2.8, 5.3), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2), fontsize=7)
-
-    ax.annotate('Mastery Telemetry', xy=(8.0, 2.8), xytext=(4.5, 0.9), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2), fontsize=7)
-    ax.annotate('At-Risk Alerts', xy=(1.9, 2.5), xytext=(6.8, 2.2), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2), fontsize=7)
-
-    ax.set_xlim(0, 11)
-    ax.set_ylim(0, 10)
-    p = os.path.join(IMG_DIR, "fig_dfd1.png")
-    plt.tight_layout()
-    plt.savefig(p, dpi=300, bbox_inches='tight')
-    plt.close()
-    return p
-
-def create_er_diagram():
-    fig, ax = plt.subplots(figsize=(11, 7.5), dpi=300)
-    ax.axis('off')
-    ax.text(5.5, 9.7, "SkillForge AI - Relational Database Entity Schema (ER Model)", ha='center', va='center', fontsize=13, fontweight='bold', color='#0F172A')
-
-    tables = [
-        (1.8, 8.0, "USERS", ["PK: id (UUID)", "email (VARCHAR)", "role (ENUM)", "password_hash", "status"]),
-        (5.5, 8.0, "CLASSROOMS", ["PK: id (UUID)", "code (VARCHAR)", "join_code (UNIQUE)", "FK: created_by", "student_count"]),
-        (9.2, 8.0, "ASSESSMENTS", ["PK: id (UUID)", "FK: course_id", "title (VARCHAR)", "total_points", "status"]),
-        
-        (1.8, 4.7, "STUDENT_ENROLLMENTS", ["PK: id (UUID)", "FK: classroom_id", "FK: student_id", "enrolled_at", "status"]),
-        (5.5, 4.7, "ASSESSMENT_QUESTIONS", ["PK: id (UUID)", "FK: assessment_id", "question_text", "max_score", "sample_solution"]),
-        (9.2, 4.7, "RUBRICS & CRITERIA", ["PK: id (UUID)", "FK: question_id", "criterion_name", "max_points", "weight"]),
-        
-        (1.8, 1.4, "STUDENT_IDENTITY_MAP", ["PK: id (UUID)", "FK: student_id", "anon_token (UNIQUE)", "created_at"]),
-        (5.5, 1.4, "WRITTEN_SUBMISSIONS", ["PK: id (UUID)", "FK: question_id", "FK: student_id", "answer_text", "status"]),
-        (9.2, 1.4, "FAIRGRADE_EVALUATIONS", ["PK: id (UUID)", "FK: submission_id", "total_score", "confidence_score", "criterion_scores"]),
-    ]
-
-    for x, y, title, cols in tables:
-        hdr = patches.Rectangle((x-1.4, y+0.4), 2.8, 0.4, facecolor='#1E40AF', edgecolor='#1E3A8A', lw=1.5)
-        ax.add_patch(hdr)
-        ax.text(x, y+0.6, title, ha='center', va='center', fontsize=8, fontweight='bold', color='#FFFFFF')
-        
-        body = patches.Rectangle((x-1.4, y-0.8), 2.8, 1.2, facecolor='#F8FAFC', edgecolor='#CBD5E1', lw=1.5)
-        ax.add_patch(body)
-        body_text = "\n".join(cols)
-        ax.text(x, y-0.2, body_text, ha='center', va='center', fontsize=7, color='#334155', linespacing=1.3)
-
-    # Connections
-    ax.annotate('', xy=(4.1, 8.0), xytext=(3.2, 8.0), arrowprops=dict(arrowstyle="-|>", color='#64748B', lw=1.2))
-    ax.annotate('', xy=(7.8, 8.0), xytext=(6.9, 8.0), arrowprops=dict(arrowstyle="-|>", color='#64748B', lw=1.2))
-    ax.annotate('', xy=(5.5, 5.3), xytext=(8.5, 7.1), arrowprops=dict(arrowstyle="-|>", color='#64748B', lw=1.2))
-    ax.annotate('', xy=(7.8, 4.7), xytext=(6.9, 4.7), arrowprops=dict(arrowstyle="-|>", color='#64748B', lw=1.2))
-    ax.annotate('', xy=(5.5, 2.1), xytext=(5.5, 3.8), arrowprops=dict(arrowstyle="-|>", color='#64748B', lw=1.2))
-    ax.annotate('', xy=(7.8, 1.4), xytext=(6.9, 1.4), arrowprops=dict(arrowstyle="-|>", color='#64748B', lw=1.2))
-    ax.annotate('', xy=(1.8, 2.1), xytext=(1.8, 3.8), arrowprops=dict(arrowstyle="-|>", color='#64748B', lw=1.2))
-
-    ax.set_xlim(0, 11)
-    ax.set_ylim(0, 10)
-    p = os.path.join(IMG_DIR, "fig_er.png")
-    plt.tight_layout()
-    plt.savefig(p, dpi=300, bbox_inches='tight')
-    plt.close()
-    return p
-
-def create_sequence_diagram():
-    fig, ax = plt.subplots(figsize=(11, 6.5), dpi=300)
-    ax.axis('off')
-    ax.text(5.5, 9.6, "SkillForge AI - Sequence Diagram (Double-Blind Evaluation Lifecycle)", ha='center', va='center', fontsize=13, fontweight='bold', color='#0F172A')
-
-    actors = [
-        (1.2, "Student"),
-        (3.5, "Backend Core"),
-        (6.0, "Anonymizer"),
-        (8.5, "FairGrade (FastAPI)"),
-        (10.5, "Gemini LLM")
-    ]
-
-    for x, name in actors:
-        r = patches.Rectangle((x-0.8, 8.7), 1.6, 0.6, facecolor='#EFF6FF', edgecolor='#2563EB', lw=1.5)
-        ax.add_patch(r)
-        ax.text(x, 9.0, name, ha='center', va='center', fontsize=8, fontweight='bold', color='#1E40AF')
-        ax.plot([x, x], [1.0, 8.7], '--', color='#CBD5E1', lw=1.2)
-
-    # Sequence Steps
-    steps = [
-        (1.2, 3.5, 8.0, "1: submitWrittenAnswer(text, qId)"),
-        (3.5, 6.0, 7.2, "2: createAnonToken(studentId, text)"),
-        (6.0, 3.5, 6.4, "3: return {anonToken, sanitizedText}"),
-        (3.5, 8.5, 5.6, "4: evaluateSubmission(anonPayload, rubric)"),
-        (8.5, 10.5, 4.8, "5: callGemini(PromptPassA, PromptPassB)"),
-        (10.5, 8.5, 4.0, "6: return {criteriaScores, rationale}"),
-        (8.5, 8.5, 3.2, "7: computeConfidence & varianceCheck()"),
-        (8.5, 3.5, 2.4, "8: return GradeReport JSON"),
-        (3.5, 1.2, 1.6, "9: notifyEvaluationResult(score, feedback)")
-    ]
-
-    for x1, x2, y, label in steps:
-        if x1 == x2:
-            # Self call
-            ax.plot([x1, x1+0.6, x1+0.6, x1], [y+0.2, y+0.2, y-0.2, y-0.2], color='#7C3AED', lw=1.2)
-            ax.annotate('', xy=(x1, y-0.2), xytext=(x1+0.1, y-0.2), arrowprops=dict(arrowstyle="->", color='#7C3AED', lw=1.2))
-            ax.text(x1+0.7, y, label, fontsize=7.5, color='#4C1D95', va='center')
-        else:
-            ax.annotate('', xy=(x2, y), xytext=(x1, y), arrowprops=dict(arrowstyle="->", color='#2563EB', lw=1.2))
-            ax.text((x1+x2)/2, y+0.18, label, ha='center', va='center', fontsize=7.5, color='#1E3A8A')
-
-    ax.set_xlim(0, 11.5)
-    ax.set_ylim(0, 10)
-    p = os.path.join(IMG_DIR, "fig_seq.png")
-    plt.tight_layout()
-    plt.savefig(p, dpi=300, bbox_inches='tight')
-    plt.close()
-    return p
-
-def create_activity_diagram():
-    fig, ax = plt.subplots(figsize=(10, 7), dpi=300)
-    ax.axis('off')
-    ax.text(5.0, 9.6, "SkillForge AI - Activity Diagram (Adaptive Assessment Workflow)", ha='center', va='center', fontsize=13, fontweight='bold', color='#0F172A')
-
-    # Start Node
-    ax.plot(5.0, 8.9, 'o', markersize=14, color='#1E293B')
-    ax.text(5.0, 8.5, "Start: Student Accesses Assessment", ha='center', va='center', fontsize=8, color='#475569')
-
-    # Activity Boxes
-    def draw_act(x, y, txt, col='#2563EB'):
-        r = patches.FancyBboxPatch((x-1.6, y-0.4), 3.2, 0.8, boxstyle="round,pad=0.15", edgecolor=col, facecolor='#EFF6FF', lw=1.5)
-        ax.add_patch(r)
-        ax.text(x, y, txt, ha='center', va='center', fontsize=7.5, fontweight='bold', color='#1E40AF')
-
-    draw_act(5.0, 7.6, "Submit Written Answer / Code")
-    draw_act(5.0, 6.4, "Double-Blind Anonymization\n& PII Stripping Filter")
-    draw_act(5.0, 5.2, "Dual-Pass FairGrade Inference\n(Gemini 2.0 Flash Engine)")
-
-    # Decision Diamond
-    def draw_diamond(x, y, txt):
-        pts = [[x, y+0.45], [x+1.1, y], [x, y-0.45], [x-1.1, y]]
-        poly = patches.Polygon(pts, closed=True, edgecolor='#D97706', facecolor='#FFFBEB', lw=1.8)
-        ax.add_patch(poly)
-        ax.text(x, y, txt, ha='center', va='center', fontsize=7, fontweight='bold', color='#92400E')
-
-    draw_diamond(5.0, 3.8, "Variance > 10%?")
-
-    # Yes branch -> Flag for Human Review
-    draw_act(8.5, 3.8, "Flag in Audit Queue\nfor Human Faculty Review", '#DC2626')
-    
-    # No branch -> Persist Grade & Update Mastery
-    draw_act(5.0, 2.3, "Persist Criterion Scores\n& Update Topic Mastery Index", '#059669')
-    draw_act(5.0, 1.1, "Render Constructive Feedback\n& Socratic Practice Hints", '#059669')
-
-    # End Node
-    ax.plot(5.0, 0.3, 'o', markersize=14, color='#1E293B')
-    ax.plot(5.0, 0.3, 'o', markersize=8, color='#FFFFFF')
-
-    # Connectors
-    ax.annotate('', xy=(5.0, 8.0), xytext=(5.0, 8.7), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2))
-    ax.annotate('', xy=(5.0, 6.8), xytext=(5.0, 7.2), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2))
-    ax.annotate('', xy=(5.0, 5.6), xytext=(5.0, 6.0), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2))
-    ax.annotate('', xy=(5.0, 4.3), xytext=(5.0, 4.8), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2))
-
-    ax.annotate('Yes', xy=(6.9, 3.8), xytext=(6.1, 3.8), arrowprops=dict(arrowstyle="->", color='#DC2626', lw=1.2), fontsize=7.5, color='#DC2626')
-    ax.annotate('No', xy=(5.0, 2.7), xytext=(5.0, 3.35), arrowprops=dict(arrowstyle="->", color='#059669', lw=1.2), fontsize=7.5, color='#059669')
-    ax.annotate('', xy=(5.0, 1.5), xytext=(5.0, 1.9), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2))
-    ax.annotate('', xy=(5.0, 0.5), xytext=(5.0, 0.7), arrowprops=dict(arrowstyle="->", color='#64748B', lw=1.2))
-
-    ax.set_xlim(0, 10.5)
-    ax.set_ylim(0, 10)
-    p = os.path.join(IMG_DIR, "fig_act.png")
-    plt.tight_layout()
-    plt.savefig(p, dpi=300, bbox_inches='tight')
-    plt.close()
-    return p
-
-print("Generating diagram files...")
-img_arch = create_architecture_diagram()
-img_usecase = create_usecase_diagram()
-img_dfd0 = create_dfd_level0_diagram()
-img_dfd1 = create_dfd_level1_diagram()
-img_er = create_er_diagram()
-img_seq = create_sequence_diagram()
-img_act = create_activity_diagram()
-print("Diagram generation completed.")
-
-# ---------------------------------------------------------------------------
-# 2. Document Construction (Comprehensive 40+ Pages)
-# ---------------------------------------------------------------------------
 
 doc = Document()
 
-# Page Setup: Standard Academic Margins
+# Page Setup: Standard Academic Margins (1 inch all around)
 for sec in doc.sections:
     sec.top_margin = Inches(1.0)
     sec.bottom_margin = Inches(1.0)
@@ -397,7 +25,7 @@ def set_cell_bg(cell, hex_color):
 
 def add_h1(text):
     p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(16)
+    p.paragraph_format.space_before = Pt(18)
     p.paragraph_format.space_after = Pt(8)
     p.paragraph_format.keep_with_next = True
     r = p.add_run(text)
@@ -480,13 +108,17 @@ def add_code(code_str):
     r.font.color.rgb = RGBColor(15, 23, 42)
     doc.add_paragraph().paragraph_format.space_after = Pt(4)
 
-def add_fig(img_path, caption):
+def add_fig(img_filename, caption, width_in=6.0):
+    img_path = os.path.join(IMG_DIR, img_filename)
+    if not os.path.exists(img_path):
+        print(f"Warning: Image {img_path} not found.")
+        return
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.paragraph_format.space_before = Pt(10)
     p.paragraph_format.space_after = Pt(2)
     r = p.add_run()
-    r.add_picture(img_path, width=Inches(6.0))
+    r.add_picture(img_path, width=Inches(width_in))
     
     cp = doc.add_paragraph()
     cp.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -500,10 +132,10 @@ def add_fig(img_path, caption):
     cr.font.color.rgb = RGBColor(71, 85, 105)
 
 # ===========================================================================
-# PRELIMINARY PAGES
+# 1. PRELIMINARY PAGES
 # ===========================================================================
 
-# 1. Cover Page
+# Cover Page
 p_space = doc.add_paragraph()
 p_space.paragraph_format.space_before = Pt(40)
 
@@ -569,7 +201,7 @@ r_dept.font.color.rgb = RGBColor(15, 23, 42)
 
 doc.add_page_break()
 
-# 2. Declaration Page
+# Declaration Page
 p_d = doc.add_paragraph()
 p_d.alignment = WD_ALIGN_PARAGRAPH.CENTER
 p_d.paragraph_format.space_before = Pt(20)
@@ -608,7 +240,7 @@ r_loc.font.size = Pt(11)
 
 doc.add_page_break()
 
-# 3. Certificate of Approval
+# Certificate of Approval
 p_cert = doc.add_paragraph()
 p_cert.alignment = WD_ALIGN_PARAGRAPH.CENTER
 p_cert.paragraph_format.space_before = Pt(20)
@@ -631,7 +263,7 @@ r_cs.font.size = Pt(11)
 
 doc.add_page_break()
 
-# 4. Acknowledgement
+# Acknowledgement
 p_ack = doc.add_paragraph()
 p_ack.alignment = WD_ALIGN_PARAGRAPH.CENTER
 p_ack.paragraph_format.space_before = Pt(20)
@@ -643,7 +275,7 @@ r_at.font.bold = True
 
 add_p("I express my deepest gratitude and sincere thanks to CHRIST (Deemed to be University), Delhi NCR Campus, for providing an intellectually vibrant environment, world-class laboratory resources, and encouragement that made the completion of this Master's project possible.")
 
-add_p("I wish to place on record my heartfelt appreciation and profound gratitude to my supervisor, Dr. Supervisor, for their invaluable mentorship, continuous encouragement, and insightful technical feedback throughout the development of SkillForge AI. Their high academic rigor and constructive critiques greatly shaped the architecture of this platform.")
+add_p("I wish to place on record my heartfelt appreciation and profound gratitude to my project supervisor, Dr. Supervisor, for their constant guidance, valuable technical advice, constructive criticism, and encouragement throughout the development of SkillForge AI. Their high academic rigor and constructive critiques greatly shaped the architecture of this platform.")
 
 add_p("I also extend my sincere gratitude to the Head of the Department and all respected faculty members of the School of Sciences for imparting solid computational foundations and continuous academic support.")
 
@@ -659,7 +291,7 @@ r_as.font.bold = True
 
 doc.add_page_break()
 
-# 5. Abstract
+# Abstract
 p_abs = doc.add_paragraph()
 p_abs.alignment = WD_ALIGN_PARAGRAPH.CENTER
 p_abs.paragraph_format.space_before = Pt(20)
@@ -669,7 +301,7 @@ r_abst.font.name = 'Times New Roman'
 r_abst.font.size = Pt(16)
 r_abst.font.bold = True
 
-add_p("In higher education, scaling individualized feedback and fair, objective assessment across massive cohorts represents a fundamental engineering and pedagogical challenge. Traditional Learning Management Systems (LMS) remain passive content repositories, while manual subjective grading suffers from unconscious human bias, halo effects, and high evaluator burnout. Furthermore, ungrounded conversational AI models frequently hallucinate and solve assignments directly without fostering critical cognitive reasoning.")
+add_p("In modern higher education, scaling individualized feedback and fair, objective assessment across massive cohorts represents a fundamental engineering and pedagogical challenge. Traditional Learning Management Systems (LMS) remain passive content repositories, while manual subjective grading suffers from unconscious human bias, halo effects, and high evaluator burnout. Furthermore, ungrounded conversational AI models frequently hallucinate and solve assignments directly without fostering critical cognitive reasoning.")
 
 add_p("To resolve these critical shortcomings, this project introduces SkillForge AI, a distributed, multi-tenant adaptive learning and assessment ecosystem. The platform unifies three core innovations: (1) FairGrade, a double-blind, multi-perspective subjective evaluation microservice built with Python FastAPI and Google Gemini 2.0 Flash that scores open-ended written reasoning strictly against structured rubric criteria while enforcing dual-pass variance checks; (2) A Retrieval-Augmented Generation (RAG) Socratic AI tutor that digests course syllabi and guides learners through diagnostic inquiry without leaking direct answers; and (3) An isolated multi-language code execution sandbox utilizing Judge0 for automated test verification and runtime telemetry.")
 
@@ -687,7 +319,7 @@ r_kw2.font.size = Pt(11)
 
 doc.add_page_break()
 
-# 6. Table of Contents
+# Table of Contents
 p_toc = doc.add_paragraph()
 p_toc.alignment = WD_ALIGN_PARAGRAPH.LEFT
 p_toc.paragraph_format.space_before = Pt(10)
@@ -702,47 +334,57 @@ toc_lines = [
     ("Certificate of Approval", "iii"),
     ("Acknowledgement", "iv"),
     ("Abstract", "v"),
-    ("List of Figures", "viii"),
-    ("List of Tables", "ix"),
+    ("List of Figures & Screenshots", "viii"),
+    ("List of Tables", "x"),
     ("1. Chapter-1: Introduction", "1"),
     ("    1.1 Background and Overview", "1"),
-    ("    1.2 Problem Statement and Motivation", "2"),
-    ("    1.3 Project Objectives", "3"),
-    ("    1.4 Need and Significance of the Project", "4"),
-    ("    1.5 Scope of the Project", "5"),
-    ("    1.6 Organization of the Report", "6"),
-    ("2. Chapter-2: Literature Review", "7"),
-    ("    2.1 Evolution of Educational Assessment Systems", "7"),
-    ("    2.2 Automated Essay Scoring (AES) & NLP Approaches", "8"),
-    ("    2.3 Automated Programming Assessment Systems (APAS)", "9"),
-    ("    2.4 Retrieval-Augmented Generation (RAG) in Pedagogy", "10"),
-    ("    2.5 Critical Limitations of Existing Work", "11"),
-    ("    2.6 Comparative Gap Analysis", "12"),
-    ("3. Chapter-3: System Design and Methodology", "13"),
-    ("    3.1 Software Engineering Methodology", "13"),
-    ("    3.2 High-Level System Architecture", "14"),
-    ("    3.3 Microservices Decomposition & Communication Protocols", "16"),
-    ("    3.4 Data Preprocessing & Vector Ingestion Pipeline", "18"),
-    ("    3.5 Double-Blind Anonymization Protocol", "20"),
-    ("    3.6 Model Formulations & Consistency Validator", "21"),
-    ("    3.7 Entity-Relationship (ER) Schema & Data Dictionary", "23"),
-    ("    3.8 System UML Modeling Diagrams", "26"),
-    ("        3.8.1 Use Case Diagram & Actor Matrix", "26"),
-    ("        3.8.2 Data Flow Diagrams (Level 0, 1, 2)", "28"),
-    ("        3.8.3 Sequence Diagrams (Grading & Socratic Ingestion)", "30"),
-    ("        3.8.4 Activity Diagrams (Assessment Lifecycle)", "32"),
-    ("4. Chapter-4: Implementation and Result Analysis", "33"),
-    ("    4.1 Module Description & Breakdown", "33"),
-    ("    4.2 Code Snippets (Core Implementation Listings)", "36"),
-    ("    4.3 Tools & Environment Setup", "39"),
-    ("    4.4 Output Screenshots & Interface Walkthrough", "40"),
-    ("    4.5 Discussion of Results & Performance Metrics", "43"),
-    ("5. Chapter-5: Conclusion & Future Scope", "46"),
-    ("    5.1 Conclusion", "46"),
-    ("    5.2 Limitations", "47"),
-    ("    5.3 Future Scope", "48"),
-    ("References", "49"),
-    ("Appendix: Configuration & Sample Schemas", "52"),
+    ("    1.2 Problem Statement and Motivation", "3"),
+    ("    1.3 Project Objectives", "4"),
+    ("    1.4 Need and Significance of the Project", "5"),
+    ("    1.5 Scope of the Project (Functional & Non-Functional)", "6"),
+    ("    1.6 Organization of the Report", "8"),
+    ("2. Chapter-2: Literature Review", "9"),
+    ("    2.1 Evolution of Educational Assessment Systems", "9"),
+    ("    2.2 Automated Essay Scoring (AES) & NLP Approaches", "11"),
+    ("    2.3 Automated Programming Assessment Systems (APAS)", "13"),
+    ("    2.4 Retrieval-Augmented Generation (RAG) in Pedagogy", "15"),
+    ("    2.5 Critical Limitations of Existing Work", "17"),
+    ("    2.6 Comparative Gap Analysis", "18"),
+    ("3. Chapter-3: System Design and Methodology", "20"),
+    ("    3.1 Software Engineering Methodology", "20"),
+    ("    3.2 High-Level System Architecture", "21"),
+    ("    3.3 Microservices Decomposition & Communication Protocols", "24"),
+    ("    3.4 Data Preprocessing & Vector Ingestion Pipeline", "26"),
+    ("    3.5 Double-Blind Anonymization Protocol", "28"),
+    ("    3.6 Model Formulations & Consistency Validator", "30"),
+    ("    3.7 Entity-Relationship (ER) Schema & Complete Data Dictionary", "32"),
+    ("    3.8 System UML Modeling Diagrams", "36"),
+    ("        3.8.1 Use Case Diagram & Actor Matrix", "36"),
+    ("        3.8.2 Data Flow Diagrams (Level 0 Context, Level 1 Decomposition)", "38"),
+    ("        3.8.3 Sequence Diagrams (Grading & Socratic Ingestion)", "41"),
+    ("        3.8.4 Activity Diagrams (Assessment Submission Lifecycle)", "43"),
+    ("4. Chapter-4: Implementation and Result Analysis", "45"),
+    ("    4.1 Module Description & Architectural Breakdown", "45"),
+    ("    4.2 Code Snippets (Core Implementation Listings)", "49"),
+    ("    4.3 Tools & Environment Setup", "54"),
+    ("    4.4 Production Output Screenshots & UI Walkthrough", "56"),
+    ("        4.4.1 Authentication & Role Selection Portal", "56"),
+    ("        4.4.2 Student Learning Portal & Dashboard", "57"),
+    ("        4.4.3 Syllabus Knowledge Materials & Extraction", "58"),
+    ("        4.4.4 Interactive Socratic AI Tutoring Workspace", "59"),
+    ("        4.4.5 Cloud Programming Sandbox & Live Autograder", "60"),
+    ("        4.4.6 Student Academic Progress & Mastery Analytics", "61"),
+    ("        4.4.7 Teacher Classroom Dashboard & Cohort Overview", "62"),
+    ("        4.4.8 Teacher Intervention Center & Heatmaps", "63"),
+    ("        4.4.9 Teacher Syllabus Taxonomy Builder", "64"),
+    ("        4.4.10 Administrator Telemetry & Health Center", "65"),
+    ("    4.5 Discussion of Results & Empirical Performance Benchmarks", "66"),
+    ("5. Chapter-5: Conclusion & Future Scope", "70"),
+    ("    5.1 Conclusion & Project Achievements", "70"),
+    ("    5.2 Technical Limitations", "72"),
+    ("    5.3 Future Scope & Engineering Roadmap", "73"),
+    ("References", "75"),
+    ("Appendix: Data Models & Configuration Schemas", "78"),
 ]
 
 for title, page in toc_lines:
@@ -753,7 +395,7 @@ for title, page in toc_lines:
     rt = p.add_run(title)
     rt.font.name = 'Times New Roman'
     rt.font.size = Pt(11)
-    if "Chapter" in title or title in ["Declaration", "Certificate of Approval", "Acknowledgement", "Abstract", "References", "Appendix: Configuration & Sample Schemas"]:
+    if "Chapter" in title or title in ["Declaration", "Certificate of Approval", "Acknowledgement", "Abstract", "References", "Appendix: Data Models & Configuration Schemas"]:
         rt.font.bold = True
     
     dots = max(5, 76 - len(title))
@@ -770,28 +412,33 @@ for title, page in toc_lines:
 
 doc.add_page_break()
 
-# 7. List of Figures
+# List of Figures
 p_lof = doc.add_paragraph()
 p_lof.paragraph_format.space_before = Pt(10)
 p_lof.paragraph_format.space_after = Pt(16)
-r_loft = p_lof.add_run("List of Figures")
+r_loft = p_lof.add_run("List of Figures & Screenshots")
 r_loft.font.name = 'Times New Roman'
 r_loft.font.size = Pt(16)
 r_loft.font.bold = True
 
 figs = [
-    ("Figure 3.1: SkillForge AI Distributed Microservice Architecture", "15"),
-    ("Figure 3.2: Retrieval-Augmented Generation (RAG) Ingestion Flow", "19"),
-    ("Figure 3.3: SkillForge AI Relational Entity-Relationship (ER) Schema", "24"),
-    ("Figure 3.4: System Use Case Model (Student, Teacher, Admin Actors)", "27"),
-    ("Figure 3.5: DFD Level 0 — Context Diagram", "28"),
-    ("Figure 3.6: DFD Level 1 — Core Process Decomposition", "29"),
-    ("Figure 3.7: Sequence Diagram for Double-Blind FairGrade Lifecycle", "31"),
-    ("Figure 3.8: Activity Diagram for Adaptive Assessment Submission", "32"),
-    ("Figure 4.1: Glassmorphic Authentication & Role Selector Screen", "40"),
-    ("Figure 4.2: Student Learning Portal & Socratic AI Tutor Screen", "41"),
-    ("Figure 4.3: Teacher Intervention Center & Classroom Heatmap Screen", "42"),
-    ("Figure 4.4: FairGrade Automated Rubric Evaluation Scorecard Screen", "42"),
+    ("Figure 3.1: SkillForge AI Distributed Microservice Architecture", "23"),
+    ("Figure 3.2: SkillForge AI Relational Entity-Relationship (ER) Schema", "33"),
+    ("Figure 3.3: System Use Case Model (Student, Teacher, Admin Actors)", "37"),
+    ("Figure 3.4: DFD Level 0 — Context Diagram", "39"),
+    ("Figure 3.5: DFD Level 1 — Core Process Decomposition", "40"),
+    ("Figure 3.6: Sequence Diagram for Double-Blind FairGrade Lifecycle", "42"),
+    ("Figure 3.7: Activity Diagram for Adaptive Assessment Submission", "44"),
+    ("Figure 4.1: Glassmorphic Authentication & Role Selector Screen", "56"),
+    ("Figure 4.2: Student Learning Portal & Enrolled Classrooms Screen", "57"),
+    ("Figure 4.3: Learning Materials & Extracted Syllabus Taxonomy Screen", "58"),
+    ("Figure 4.4: Socratic AI Tutor Interactive Workspace Screen", "59"),
+    ("Figure 4.5: Online Multi-Language Programming Sandbox & Autograder Screen", "60"),
+    ("Figure 4.6: Student Academic Progress & Mastery Analytics Screen", "61"),
+    ("Figure 4.7: Teacher Classroom Overview & Course Dashboard Screen", "62"),
+    ("Figure 4.8: Teacher Intervention Center & Topic Mastery Heatmap Screen", "63"),
+    ("Figure 4.9: Teacher Course Materials & Bloom's Taxonomy Extraction Screen", "64"),
+    ("Figure 4.10: Admin System Telemetry & AI Services Health Screen", "65"),
 ]
 
 for title, page in figs:
@@ -813,7 +460,7 @@ for title, page in figs:
 
 doc.add_page_break()
 
-# 8. List of Tables
+# List of Tables
 p_lot = doc.add_paragraph()
 p_lot.paragraph_format.space_before = Pt(10)
 p_lot.paragraph_format.space_after = Pt(16)
@@ -823,13 +470,13 @@ r_lott.font.size = Pt(16)
 r_lott.font.bold = True
 
 tbls = [
-    ("Table 2.1: Comparative Gap Analysis of EdTech Assessment Platforms", "12"),
-    ("Table 3.1: Complete Technology Stack and System Specifications", "17"),
-    ("Table 3.2: Complete Relational Database Schema Data Dictionary", "25"),
-    ("Table 3.3: System Use Case Actor Description Matrix", "28"),
-    ("Table 4.1: Microservice Benchmark Latency and Memory Utilization", "43"),
-    ("Table 4.2: FairGrade Human vs AI Grading Correlation & Error Metric", "44"),
-    ("Table 4.3: Code Sandbox Autograder Execution Benchmark across Languages", "45"),
+    ("Table 2.1: Comparative Gap Analysis of EdTech Assessment Platforms", "19"),
+    ("Table 3.1: Complete Technology Stack and Microservice Allocations", "25"),
+    ("Table 3.2: Complete Relational Database Schema Data Dictionary", "34"),
+    ("Table 3.3: System Use Case Actor Description Matrix", "38"),
+    ("Table 4.1: Microservice Benchmark Latency and Memory Utilization", "67"),
+    ("Table 4.2: FairGrade Human vs AI Grading Correlation & Error Metrics", "68"),
+    ("Table 4.3: Code Sandbox Autograder Execution Benchmark across Languages", "69"),
 ]
 
 for title, page in tbls:
@@ -858,18 +505,18 @@ doc.add_page_break()
 add_h1("1. Chapter-1: Introduction")
 
 add_h2("1.1 Background and Overview")
-add_p("The rapid digital transformation of higher education and the explosive growth of student enrollments in computer science, engineering, and data disciplines have placed unprecedented strain on institutional teaching and assessment methodologies. In university classrooms with cohorts ranging from 60 to over 500 students, the traditional educational paradigm—characterized by close, personalized apprenticeship, detailed qualitative feedback on written essays, and immediate debugging assistance during programming labs—has become increasingly untenable.")
+add_p("The rapid digital transformation of global higher education and the explosive growth of student enrollments in computer science, software engineering, and computational disciplines have placed unprecedented strain on institutional teaching, mentoring, and assessment methodologies. In university classrooms with cohorts frequently ranging from 60 to over 500 students, the classical educational ideal—characterized by close, personalized apprenticeship, rapid qualitative feedback on written proofs, and immediate line-by-line debugging assistance during programming labs—has become structurally untenable.")
 
-add_p("To manage these unsustainable evaluation workloads, academic institutions frequently resort to high-stakes, reductionist evaluation mechanisms such as multiple-choice questions (MCQs) or binary pass/fail unit testing suites. While these instruments offer high administrative throughput, they measure only low-level factual recall or superficial code compilation. They fail entirely to assess higher-order cognitive competencies, including architectural design reasoning, mathematical proof construction, conceptual differentiation, and algorithmic problem decomposition.")
+add_p("To manage these unsustainable grading workloads, academic institutions frequently resort to high-throughput, reductionist evaluation instruments such as multiple-choice questions (MCQs) or binary pass/fail unit testing scripts. While these mechanisms provide automated scoring, they measure only low-level factual recall or superficial code compilation. They fail entirely to measure higher-order cognitive competencies, such as architectural reasoning, mathematical proof rigor, conceptual differentiation, and algorithmic problem decomposition.")
 
-add_p("When open-ended subjective assessments, written proofs, and coding exercises are assigned, manual evaluation by human educators introduces severe cognitive bottlenecks. Evaluating hundreds of complex, idiosyncratic student submissions leads to grading fatigue, halo effects (where prior student performance skews subsequent evaluation), and marked inter-rater variance across teaching assistants. Furthermore, students typically wait weeks to receive graded papers, by which point the pedagogical window for timely cognitive reinforcement has passed.")
+add_p("When open-ended subjective examinations, written derivations, and multi-file coding projects are assigned, manual evaluation by human educators introduces severe cognitive bottlenecks. Evaluating hundreds of complex, idiosyncratic student submissions inevitably leads to grading fatigue, halo effects (where an evaluator's impression of past student performance skews current marks), and severe inter-rater variance across multiple teaching assistants. Furthermore, students typically wait weeks to receive graded feedback, by which point the pedagogical window for timely cognitive reinforcement has closed.")
 
 add_p("SkillForge AI is engineered as an enterprise-grade, multi-tenant digital classroom platform designed to resolve these fundamental tensions between educational scalability, evaluation objectivity, and adaptive learning support.")
 
 add_h2("1.2 Problem Statement and Motivation")
-add_p("Modern educational systems suffer from three interconnected systemic failures:")
-add_bullet(" Human grading of subjective papers is inherently vulnerable to unconscious identity bias (such as student gender, ethnicity, handwriting neatness, and past academic reputation). A professor evaluating the 80th paper at 11:00 PM applies markedly different cognitive standards than when evaluating the 1st paper at 9:00 AM.", "1. Subjective Grading Inconsistency & Cognitive Fatigue:")
-add_bullet(" When students encounter intellectual bottlenecks while studying complex theoretical subjects (such as Relational Database Normalization, Distributed Consensus, or Operating System Deadlocks), they turn to unconstrained commercial LLM chatbots. These public chatbots lack grounding in the institutional syllabus, hallucinate incorrect facts, and provide direct, fully solved code—short-circuiting the student's cognitive learning cycle and facilitating academic dishonesty.", "2. Unconstrained AI Hallucinations & Solution Leaks:")
+add_p("Modern educational computing systems suffer from three interconnected systemic failures:")
+add_bullet(" Human grading of subjective papers is inherently vulnerable to unconscious identity bias (such as student gender, ethnicity, handwriting neatness, and past academic reputation). A professor evaluating the 80th paper at midnight applies markedly different cognitive standards than when evaluating the 1st paper at 9:00 AM.", "1. Subjective Grading Inconsistency & Cognitive Fatigue:")
+add_bullet(" When students encounter intellectual bottlenecks while studying complex theoretical subjects (such as Relational Normalization, Distributed Consensus, or Operating System Deadlocks), they turn to unconstrained commercial LLM chatbots. These public chatbots lack grounding in the institutional syllabus, hallucinate incorrect facts, and provide direct, fully solved code—short-circuiting the student's cognitive learning cycle and facilitating academic dishonesty.", "2. Unconstrained AI Hallucinations & Solution Leaks:")
 add_bullet(" University faculty lack real-time visibility into class-wide conceptual misunderstandings. Standard LMS gradebooks record historic marks but offer zero predictive intelligence regarding which specific theoretical subtopics are failing across the cohort.", "3. Fragmented Academic Telemetry & Delayed Intervention:")
 
 add_p("The primary motivation behind SkillForge AI is to construct a unified, bias-suppressed educational ecosystem that harnesses modern Large Language Models (LLMs) with strict pedagogical guardrails—turning AI from a cheating tool into an objective, rubric-anchored evaluation engine and an adaptive Socratic learning companion.")
@@ -887,7 +534,7 @@ add_p("Traditional institutional Learning Management Systems (LMS) such as Canva
 
 add_p("By combining double-blind cryptographic tokenization with rubric-anchored reasoning models, SkillForge AI guarantees that every student's work is judged solely on intellectual merit. Concurrently, by grounding the Socratic AI tutor in uploaded course materials, the platform ensures that students receive instant, step-by-step cognitive scaffolding at any hour of the day without compromising academic integrity.")
 
-add_h2("1.5 Scope of the Project")
+add_h2("1.5 Scope of the Project (Functional & Non-Functional)")
 add_p("The functional scope of SkillForge AI encompasses three primary stakeholder domains:")
 add_bullet(" Secure registration, access to enrolled classrooms, interactive Socratic chat grounded in course syllabi, submission of written subjective examinations, in-browser code editing and execution, detailed rubric scorecard inspection, and formal grade appeals.", "• Student Domain Scope:")
 add_bullet(" Creation of course classrooms and join codes, automated taxonomy extraction from uploaded PDF syllabi, design of structured multi-criterion rubrics, execution of batch automated grading, manual override of flagged evaluation variances, and monitoring of at-risk student telemetry.", "• Teacher / Faculty Domain Scope:")
@@ -999,7 +646,7 @@ add_p("The engineering lifecycle followed six structured phases:\n"
 add_h2("3.2 High-Level System Architecture")
 add_p("SkillForge AI is architected as a modular, decoupled three-tier distributed ecosystem, ensuring high availability, fault isolation, and horizontal scalability.")
 
-add_fig(img_arch, "Figure 3.1: SkillForge AI Distributed Microservice Architecture")
+add_fig("fig_arch.png", "Figure 3.1: SkillForge AI Distributed Microservice Architecture")
 
 add_p("As illustrated in Figure 3.1, the system architecture partitions responsibilities cleanly across three distinct tiers:")
 add_bullet(" Implemented in React 18 with Vite, delivering responsive, glassmorphic interfaces for students, faculty, and administrators without page reloads. Interfaces communicate exclusively via RESTful JSON over HTTPS.", "1. Presentation Tier (Port 3000):")
@@ -1070,8 +717,8 @@ add_p("The Overall Evaluation Confidence Metric C_eval is formulated as:\n"
       "C_eval = 1.0 - (1/k * sum_{i=1}^k V_i) * (1.0 - Rationale_Penalty)\n"
       "where Rationale_Penalty evaluates whether the LLM provided sufficient textual justification (> 20 words per criterion).")
 
-add_h2("3.7 Entity-Relationship (ER) Schema & Data Dictionary")
-add_fig(img_er, "Figure 3.3: SkillForge AI Relational Entity-Relationship (ER) Schema")
+add_h2("3.7 Entity-Relationship (ER) Schema & Complete Data Dictionary")
+add_fig("fig_er.png", "Figure 3.2: SkillForge AI Relational Entity-Relationship (ER) Schema")
 
 add_p("Table 3.2 details the complete database schema definitions, data types, constraints, and relationships implemented in PostgreSQL.")
 
@@ -1114,28 +761,28 @@ for i, row in enumerate(d3_2):
 add_h2("3.8 System UML Modeling Diagrams")
 
 add_h3("3.8.1 Use Case Diagram & Actor Matrix")
-add_fig(img_usecase, "Figure 3.4: SkillForge AI System Use Case Model")
+add_fig("fig_usecase.png", "Figure 3.3: System Use Case Model (Student, Teacher, Admin Actors)")
 
 add_p("The platform defines three primary human actors interacting within the system boundary:")
 add_bullet(" Accesses course syllabi, interacts with the Socratic AI tutor, submits written proofs, executes code in the sandbox, and reviews FairGrade scorecards.", "• Student Actor:")
 add_bullet(" Uploads course materials, triggers taxonomy extraction, designs rubric criteria, executes batch AI grading, reviews flagged score variances, and monitors class mastery heatmaps.", "• Teacher Actor:")
 add_bullet(" Manages user accounts, enforces RBAC policies, inspects security audit logs, and monitors LLM endpoint health.", "• System Administrator Actor:")
 
-add_h3("3.8.2 Data Flow Diagrams (DFD Level 0, Level 1, Level 2)")
-add_fig(img_dfd0, "Figure 3.5: DFD Level 0 — Context Diagram")
-add_fig(img_dfd1, "Figure 3.6: DFD Level 1 — Core Process Decomposition")
+add_h3("3.8.2 Data Flow Diagrams (Level 0 Context, Level 1 Decomposition)")
+add_fig("fig_dfd0.png", "Figure 3.4: DFD Level 0 — Context Diagram")
+add_fig("fig_dfd1.png", "Figure 3.5: DFD Level 1 — Core Process Decomposition")
 
-add_p("As shown in DFD Level 1 (Figure 3.6), raw student answers flow first into Process 1.0 (Double-Blind Anonymizer), which creates an anonymous token and passes sanitized text to Process 2.0 (FairGrade Evaluator). Process 2.0 consults rubric criteria and outputs scores to Datastore D1 (Submissions Store). Concurrently, Process 4.0 extracts syllabus taxonomies into Datastore D2 (Vector Store), allowing Process 3.0 (Socratic Engine) to serve contextual hints back to the student.")
+add_p("As shown in DFD Level 1 (Figure 3.5), raw student answers flow first into Process 1.0 (Double-Blind Anonymizer), which creates an anonymous token and passes sanitized text to Process 2.0 (FairGrade Evaluator). Process 2.0 consults rubric criteria and outputs scores to Datastore D1 (Submissions Store). Concurrently, Process 4.0 extracts syllabus taxonomies into Datastore D2 (Vector Store), allowing Process 3.0 (Socratic Engine) to serve contextual hints back to the student.")
 
 add_h3("3.8.3 Sequence Diagrams (Grading & Socratic Ingestion)")
-add_fig(img_seq, "Figure 3.7: Sequence Diagram for Double-Blind FairGrade Lifecycle")
+add_fig("fig_seq.png", "Figure 3.6: Sequence Diagram for Double-Blind FairGrade Lifecycle")
 
-add_p("The sequence diagram (Figure 3.7) demonstrates the step-by-step asynchronous message flow between the Student, Core Backend, Anonymizer Service, FairGrade FastAPI microservice, and Google Gemini LLM API.")
+add_p("The sequence diagram (Figure 3.6) demonstrates the step-by-step asynchronous message flow between the Student, Core Backend, Anonymizer Service, FairGrade FastAPI microservice, and Google Gemini LLM API.")
 
-add_h3("3.8.4 Activity Diagrams (Assessment Lifecycle)")
-add_fig(img_act, "Figure 3.8: Activity Diagram for Adaptive Assessment Submission & Evaluation")
+add_h3("3.8.4 Activity Diagrams (Assessment Submission Lifecycle)")
+add_fig("fig_act.png", "Figure 3.7: Activity Diagram for Adaptive Assessment Submission & Flagging")
 
-add_p("The activity diagram (Figure 3.8) depicts the end-to-end decision logic during student submission, dual-pass consistency checking, variance branching, and constructive feedback generation.")
+add_p("The activity diagram (Figure 3.7) depicts the end-to-end decision logic during student submission, dual-pass consistency checking, variance branching, and constructive feedback generation.")
 
 doc.add_page_break()
 
@@ -1145,7 +792,7 @@ doc.add_page_break()
 
 add_h1("4. Chapter-4: Implementation and Result Analysis")
 
-add_h2("4.1 Module Description & Breakdown")
+add_h2("4.1 Module Description & Architectural Breakdown")
 add_p("SkillForge AI is composed of six modular software subsystems:")
 
 add_p("1. Authentication, Authorization & Security Module:\n"
@@ -1291,54 +938,49 @@ add_bullet(" Cloud PostgreSQL 15.1 hosted on Supabase with SSL pooling", "• Re
 add_bullet(" Google Gemini 2.0 Flash via official `@google/genai` and `google-genai` SDKs", "• Generative AI Foundation API:")
 add_bullet(" Judge0 Cloud CE Sandbox API (v1.14.0)", "• Code Execution Sandbox:")
 
-add_h2("4.4 Output Screenshots & Interface Walkthrough")
+add_h2("4.4 Production Output Screenshots & UI Walkthrough")
 
-add_p("1. Authentication & Role Switcher Interface: Clean glassmorphic portal supporting authenticated login for Administrator, Teacher, and Student roles with session persistence.")
-add_code("""+-------------------------------------------------------------------------------+
-|  ⚡ SkillForge AI              [System Online]              [April 2026]      |
-+-------------------------------------------------------------------------------+
-|                     ┌───────────────────────────────────┐                     |
-|                     │       Welcome to SkillForge       │                     |
-|                     │  AI Adaptive Classroom Platform   │                     |
-|                     │ Email: [ student@skillforge.ai  ] │                     |
-|                     │ Pass : [ •••••••••••••••••••••  ] │                     |
-|                     │ [ Sign In to Secure Portal ]      │                     |
-|                     │ Quick Roles: [Admin] [Teach] [Stu]│                     |
-|                     └───────────────────────────────────┘                     |
-+-------------------------------------------------------------------------------+""")
+add_h3("4.4.1 Authentication & Role Selection Portal")
+add_p("Figure 4.1 shows the production authentication screen. The interface incorporates glassmorphic visual aesthetics with quick-login role chips for testing and secure password reset token flows.")
+add_fig("screen_1_login.png", "Figure 4.1: Glassmorphic Authentication & Role Selector Screen", width_in=5.8)
 
-add_p("2. Student Socratic Learning Portal: Students engage with course material via conversational diagnostic inquiry, referencing uploaded syllabus chapters.")
-add_code("""+-------------------------------------------------------------------------------+
-| SkillForge  |  📚 Classes   |  📝 Assignments   |  🤖 Socratic Tutor  | [Profile] |
-+-------------------------------------------------------------------------------+
-| [ MCA-402: Database Engineering & Normalization ]                             |
-| 💬 Socratic Chat Stream                   │ 📖 Course Material Chunks (RAG)  |
-| Student: Why does BCNF forbid 3NF prime?  │ • Section 4.2: 3NF vs BCNF       |
-| AI Tutor: What happens when an attribute  │   "BCNF eliminates all prime     |
-| is prime but not a superkey?              │    attribute exemptions."        |
-| [ Type your mathematical reasoning...  ]  │ [ View Full Textbook Chapter ]   |
-+-------------------------------------------------------------------------------+""")
+add_h3("4.4.2 Student Learning Portal & Dashboard")
+add_p("Figure 4.2 illustrates the student learning environment overview. Students can view active courses, upcoming written/coding deadlines, rolling GPA metrics, and direct launch buttons for Socratic tutoring.")
+add_fig("screen_2_student_dashboard.png", "Figure 4.2: Student Learning Portal & Enrolled Classrooms Screen", width_in=5.8)
 
-add_p("3. Teacher Intervention Center: Faculty view rolling mastery heatmaps and early-warning alerts for struggling students.")
-add_code("""+-------------------------------------------------------------------------------+
-| SkillForge Teacher Center  |  Active Class: MCA Section B (42 Students)       |
-+-------------------------------------------------------------------------------+
-| • 1NF / 2NF Foundations       : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 96% (Mastered)           |
-| • Boyce-Codd Normal Form      : ▇▇▇▇▇▇▇▇▇▇░░░░░░░░░░ 52% (Intervention Req)   |
-| ⚠️  At-Risk Students: Alice Smith (54%) -> [ Generate Custom Study Plan ]      |
-+-------------------------------------------------------------------------------+""")
+add_h3("4.4.3 Syllabus Knowledge Materials & Extraction")
+add_p("Figure 4.3 depicts the course materials explorer where uploaded textbook PDFs and syllabus files are chunked into structured concepts with one-click 'Ask Tutor' integration.")
+add_fig("screen_3_student_materials.png", "Figure 4.3: Learning Materials & Extracted Syllabus Taxonomy Screen", width_in=5.8)
 
-add_p("4. FairGrade Automated Rubric Evaluation Scorecard: Shows the double-blind scored report with individual criterion points, justification strings, and an appeal workflow.")
-add_code("""+-------------------------------------------------------------------------------+
-| ⚖️ FairGrade Evaluation Report   |  Submission: ANON-9F4A1C  | Score: 9.0 / 10.0 |
-+-------------------------------------------------------------------------------+
-| Criteria Breakdown:                                                           |
-| 1. Conceptual Definition [ 5.0 / 5.0 pts ] - Correct superkey definition.     |
-| 2. Formal Proof Rigor    [ 4.0 / 5.0 pts ] - Clear proof; minor edge case.    |
-| 💡 Feedback: "Great proof. Explicitly mention dependency preservation."       |
-+-------------------------------------------------------------------------------+""")
+add_h3("4.4.4 Interactive Socratic AI Tutoring Workspace")
+add_p("Figure 4.4 displays the interactive Socratic chat workspace. The AI tutor references retrieved vector chunks from the uploaded database syllabus and guides the learner with diagnostic questions.")
+add_fig("screen_4_student_socratic_tutor.png", "Figure 4.4: Socratic AI Tutor Interactive Workspace Screen", width_in=5.8)
 
-add_h2("4.5 Discussion of Results & Performance Metrics")
+add_h3("4.4.5 Cloud Programming Sandbox & Live Autograder")
+add_p("Figure 4.5 exhibits the in-browser programming IDE and live autograder console. Students write solutions in Python, C++, or Java, execute against test cases via Judge0, and receive AI execution feedback.")
+add_fig("screen_5_student_code_sandbox.png", "Figure 4.5: Online Multi-Language Programming Sandbox & Autograder Screen", width_in=5.8)
+
+add_h3("4.4.6 Student Academic Progress & Mastery Analytics")
+add_p("Figure 4.6 presents the individual student progress telemetry, displaying topic-level mastery percentages, completed assignments, and adaptive recommendations.")
+add_fig("screen_6_student_progress.png", "Figure 4.6: Student Academic Progress & Mastery Analytics Screen", width_in=5.8)
+
+add_h3("4.4.7 Teacher Classroom Dashboard & Cohort Overview")
+add_p("Figure 4.7 shows the teacher cohort management view with active classrooms (e.g., MCA Section B - Database Engineering), join codes, student counts, and quick management actions.")
+add_fig("screen_7_teacher_dashboard.png", "Figure 4.7: Teacher Classroom Overview & Course Dashboard Screen", width_in=5.8)
+
+add_h3("4.4.8 Teacher Intervention Center & Heatmaps")
+add_p("Figure 4.8 showcases the Teacher Intervention Center. Instructors monitor class-wide topic mastery heatmaps, early-warning alerts for at-risk students, and generate personalized remediation sets.")
+add_fig("screen_8_teacher_intervention.png", "Figure 4.8: Teacher Intervention Center & Topic Mastery Heatmap Screen", width_in=5.8)
+
+add_h3("4.4.9 Teacher Syllabus Taxonomy Builder")
+add_p("Figure 4.9 illustrates the automated syllabus analysis tool, which extracts Bloom's Taxonomy learning objectives, canonical covers, and prerequisite relationships from course PDFs.")
+add_fig("screen_9_teacher_materials.png", "Figure 4.9: Teacher Course Materials & Bloom's Taxonomy Extraction Screen", width_in=5.8)
+
+add_h3("4.4.10 Administrator Telemetry & Health Center")
+add_p("Figure 4.10 depicts the system administrator telemetry console, monitoring live connection statuses across PostgreSQL, Gemini 2.0 Flash, Judge0 sandboxes, and vector stores.")
+add_fig("screen_10_admin_services.png", "Figure 4.10: Admin System Telemetry & AI Services Health Screen", width_in=5.8)
+
+add_h2("4.5 Discussion of Results & Empirical Performance Benchmarks")
 add_p("The SkillForge AI platform was rigorously benchmarked across 1,000 synthetic and real-world transactions to evaluate response latency, grading precision, and memory efficiency.")
 
 # Table 4.1
@@ -1381,9 +1023,9 @@ doc.add_page_break()
 # CHAPTER 5: CONCLUSION & FUTURE SCOPE
 # ===========================================================================
 
-add_h1("5. Chapter-5: Conclusion & future scope")
+add_h1("5. Chapter-5: Conclusion & Future Scope")
 
-add_h2("5.1 Conclusion")
+add_h2("5.1 Conclusion & Project Achievements")
 add_p("The SkillForge AI project successfully addresses the long-standing educational dichotomy between cohort scalability, evaluation objectivity, and personalized instruction. By uniting a double-blind, rubric-anchored evaluation engine (FairGrade) with Retrieval-Augmented Socratic guidance and containerized multi-language code sandboxing, the platform delivers an enterprise-ready digital learning environment.")
 
 add_p("Key engineering accomplishments of this project include:")
@@ -1393,13 +1035,13 @@ add_bullet(" Building an in-memory vector space indexing pipeline that grounds S
 add_bullet(" Enabling safe in-browser compilation and test-suite verification across five major programming languages.", "4. Isolated Cloud Code Autograding:")
 add_bullet(" Providing educators with actionable predictive telemetry to remediate learning gaps before high-stakes examinations.", "5. Teacher Copilot & Intervention Center:")
 
-add_h2("5.2 Limitation")
+add_h2("5.2 Technical Limitations")
 add_p("Despite its strong performance, several technical limitations exist in the current implementation:")
 add_bullet(" Real-time subjective grading and Socratic chat require active network connectivity to Google Cloud and Judge0 endpoints.", "• Cloud API Dependency:")
 add_bullet(" Complex handwritten mathematical proofs and freehand circuit diagrams currently rely on optical character recognition (OCR), which requires high-contrast scans.", "• Handwritten Diagram OCR Nuances:")
 add_bullet(" Sandbox execution is constrained to standard runtime environments supported by the Judge0 configuration.", "• Code Execution Boundaries:")
 
-add_h2("5.3 Future Scope")
+add_h2("5.3 Future Scope & Engineering Roadmap")
 add_p("Promising future research and engineering directions for SkillForge AI include:")
 add_bullet(" Incorporating locally hosted, quantized foundation models (such as Gemma 2 9B or Llama 3 8B) running on on-premise GPU clusters for air-gapped institutional deployment.", "1. On-Premise Local LLM Deployment:")
 add_bullet(" Developing speech-to-text and voice-interactive Socratic defense modes, allowing students to verbally defend their code and theoretical proofs.", "2. Multimodal Voice Viva Defense Mode:")
@@ -1452,7 +1094,7 @@ for i, ref in enumerate(references_list):
 # APPENDIX
 # ===========================================================================
 
-add_h1("Appendix: Configuration & Sample Schemas")
+add_h1("Appendix: Data Models & Configuration Schemas")
 
 add_h2("Appendix A: FairGrade GradeReport Pydantic Schema")
 add_code("""class CriterionScore(BaseModel):
@@ -1472,7 +1114,7 @@ class GradeReport(BaseModel):
     flag_reason: Optional[str] = None
 """)
 
-add_h2("Appendix B: Environment Configuration Template (.env.example)")
+add_h2("Appendix B: Production Environment Configuration Template")
 add_code("""PORT=5000
 NODE_ENV=development
 DATABASE_URL=postgresql://postgres:password@localhost:5432/skillforge
@@ -1480,12 +1122,15 @@ GEMINI_API_KEY=your_gemini_api_key_here
 GEMINI_MODEL=gemini-2.0-flash
 AI_MODE=live
 LLM_PROVIDER=gemini
-JWT_SECRET=your-super-secret-jwt-key
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
 JWT_EXPIRES_IN=24h
 FAIRGRADE_SERVICE_URL=http://localhost:8000
 JUDGE0_API_URL=https://ce.judge0.com
+JUDGE0_API_KEY=
+YOUTUBE_API_KEY=
 """)
 
 output_docx_path = os.path.join(OUTPUT_DIR, "SkillForge_AI_Master_Project_Report.docx")
 doc.save(output_docx_path)
-print(f"Master 40+ page report generated successfully at: {output_docx_path}")
+print(f"Final Comprehensive Master Report generated successfully at: {output_docx_path}")
+
